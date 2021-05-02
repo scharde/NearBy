@@ -1,0 +1,15 @@
+{
+  "application": { "title": "Calender" },
+  "facebookapi": { "login": "" },
+  "instagramapi": { "login": "" },
+  "moment": { "dateFormat": "L", "timeFormat": "LTS" },
+  "baseUrl": "",
+  "Api": {
+    "authenticate": "api/account/authenticate",
+    "userRegister": "api/account/register",
+    "addTask": "api/Tasks",
+    "getTasks": "api/Tasks",
+    "user": "api/User",
+    "taskProgress": "api/TaskProgress"
+  }
+}
