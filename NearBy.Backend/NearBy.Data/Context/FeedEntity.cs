@@ -8,7 +8,7 @@ namespace NearBy.Data.Context.Entity.Feed
         public string Message { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public string Location { get; set; }      
+        public string Location { get; set; }
         public Geometry Geometry { get; set; }
     }
 }

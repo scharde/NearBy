@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "..";
 import { authenticateUser, setUser } from "../../service/AccountService";
@@ -32,7 +31,7 @@ export const actionCreators = {
           dispatch(push("/"));
         }
       })
-      .catch(({ response }) => toast.error(response.data));
+      .catch(({ response }) => console.log(response.data));
   },
 };
 

@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import * as Location from "expo-location";
 
 const FindMe = () => {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {

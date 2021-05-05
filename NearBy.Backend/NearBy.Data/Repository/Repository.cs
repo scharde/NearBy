@@ -200,6 +200,6 @@ namespace NearBy.Data.Repository
             return await _dbContext.Set<T>().CountAsync(filter);
         }
 
-      
+
     }
 }
