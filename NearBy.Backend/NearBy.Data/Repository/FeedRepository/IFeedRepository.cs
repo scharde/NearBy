@@ -1,15 +1,13 @@
 ﻿using NearBy.Data.Context.Entity.Feed;
 using NearBy.Data.Interfaces;
 using NearBy.Data.Repository;
-using System;
+using NearBy.Model.Feeds;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NearBy.Data.FeedRepository
 {
     public interface IFeedRepository : IRepository<FeedEntity>, IAsyncRepository<FeedEntity>
     {
+        List<FeedResultModel> GetDistanceFeeds(double latitude, double longitude, string city, int distance);
     }
 }

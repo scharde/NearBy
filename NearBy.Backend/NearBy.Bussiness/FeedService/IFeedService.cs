@@ -1,10 +1,12 @@
 ﻿using NearBy.Model.Feeds;
 using NearBy.Model.Response;
+using System.Collections.Generic;
 
 namespace NearBy.Bussiness.FeedService
 {
     public interface IFeedService
     {
-        public ResponseModel Create(FeedModel feedModel);
+        ResponseModel Create(FeedModel feedModel);
+        List<FeedResultModel> GetDistanceFeeds(double latitude, double longitude, string city, int distance);
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using System.Data.SqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -21,5 +23,7 @@ namespace NearBy.Data.Interfaces
         Task<List<T>> UpdateRangeAsync(List<T> entity);
         Task DeleteAsync(T entity);
         Task DeleteAsyncById(Expression<Func<T, bool>> filter);
+        DataSet ExecuteSP(string spName, List<SqlParameter> sqlParameters);
+
     }
 }

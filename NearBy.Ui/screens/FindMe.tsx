@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import * as Location from "expo-location";
 
-const FindMe = () => {
+const FindMeScreen = () => {
   const [location, setLocation] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FindMe;
+export default FindMeScreen;

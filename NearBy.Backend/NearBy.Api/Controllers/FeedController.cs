@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NearBy.Api.Model;
 using NearBy.Bussiness.FeedService;
 using NearBy.Model.Feeds;
+using NearBy.Model.Response;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,25 +17,22 @@ namespace NearBy.Api.Controllers
         {
             _FeedService = feedService;
         }
-        // GET: api/<NearByNotifications>
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get(double latitude, double longitude, string city, int distance)
         {
-            return new string[] { "value1", "value2" };
+            List<FeedResultModel> results = _FeedService.GetDistanceFeeds(latitude, longitude, city, distance);
+            return Ok(results);
         }
 
-        // GET api/<NearByNotifications>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<NearByNotifications>
         [HttpPost]
-        public void Post([FromBody] FeedModel feedModel)
+        public IActionResult Post([FromBody] FeedModel feedModel)
         {
-            _FeedService.Create(feedModel);
+            ResponseModel response = _FeedService.Create(feedModel);
+            if (response.Status)
+                return Ok(new { Message = response.Success.Message });
+
+            return BadRequest(new { Message = response.Failed.Message });
         }
 
         // PUT api/<NearByNotifications>/5

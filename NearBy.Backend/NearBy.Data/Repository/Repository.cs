@@ -4,9 +4,11 @@ using NearBy.Data.Context;
 using NearBy.Data.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace NearBy.Data.Repository
 {
@@ -200,6 +202,49 @@ namespace NearBy.Data.Repository
             return await _dbContext.Set<T>().CountAsync(filter);
         }
 
+
+        public DataSet ExecuteSP(string spName, List<SqlParameter> sqlParameters)
+        {
+            DataSet dataSet = null;
+            try
+            {
+                string ConnectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(spName, conn))
+                    {
+                        cmd.CommandTimeout = 30;
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            try
+                            {
+                                dataSet = new DataSet();
+                                adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+
+                                foreach (SqlParameter sqlParameter in sqlParameters)
+                                {
+                                    cmd.Parameters.Add(sqlParameter);
+                                }
+                                adapter.Fill(dataSet);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw ex;
+                            }
+                            finally
+                            {
+                                conn.Close();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("OOPs, something went wrong.\n" + e);
+            }
+            return dataSet;
+        }
 
     }
 }

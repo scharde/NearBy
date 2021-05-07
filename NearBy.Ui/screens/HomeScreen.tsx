@@ -1,20 +1,27 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Button } from "react-native";
 import Notifications, { INotificatonModel } from "../data/NotificationsData";
-import FindMe from "./FindMe";
+import {getDistanceFeeds} from "../service/FeedsService";
+import { connect } from "react-redux";
+import { ApplicationState } from "../store";
+import { actionCreators, FeedsState} from "../store/feeds";
 
-const Home = (props : any) => {
+type HomeScreenProps = FeedsState & typeof actionCreators;
+
+const HomeScreen = (props: HomeScreenProps) => {
   const [notificationsData, setNotification] = useState(
     [] as INotificatonModel[]
   );
+
   useState(() => {
-    setNotification(Notifications);
-  }, []);
+    props.updateFeedsAction();
+  });
+
   return (
     <View style={styles.container}>
       <FlatList
         style={styles.flatList}
-        data={notificationsData}
+        data={props.data}
         renderItem={({ item }) => {
           return (
             <View style={styles.notificationsContainer}>
@@ -29,17 +36,21 @@ const Home = (props : any) => {
         }}
         keyExtractor={(item) => item.id}
       />
-      <FindMe></FindMe>
+      {/* <Button title='Find Location' onPress={() => {
+        props.navigation.navigate('FindMe');
+      }}></Button> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: 10,
+    // borderWidth: 1,
+    borderColor:'red',
+    justifyContent:'center',
+    alignContent:'flex-end',
+    padding : 5,
   },
   notificationsContainer: {
     shadowColor: "black",
@@ -48,9 +59,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.26,
     elevation: 8,
     backgroundColor: "white",
-    padding: 20,
+    padding: 10,
     borderRadius: 10,
-    marginTop: 10,
+    // margin: 10,
+    margin : 10,
+    borderColor:'blue',
+    // borderWidth:1
   },
   title: {
     fontWeight: "bold",
@@ -58,10 +72,9 @@ const styles = StyleSheet.create({
     color: "black",
   },
   flatList: {
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: "black",
-    display: "none",
   },
 });
 
-export default Home;
+export default connect((state: ApplicationState) => state.feedsState, actionCreators)(HomeScreen as any);

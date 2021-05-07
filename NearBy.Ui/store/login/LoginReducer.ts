@@ -1,10 +1,7 @@
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "..";
-import { authenticateUser, setUser } from "../../service/AccountService";
 import { LoginState, unloadedState } from "./LoginState";
 import { USERNAME_ACTION, PASSWORD_ACTION, REMEMBER_ME_CHECK, RESET_LOGIC_FORM, KnownAction } from "./LoginType";
-import { push } from "connected-react-router";
-import { CallHistoryMethodAction } from "connected-react-router";
 
 export const actionCreators = {
   resetLoginAction: () => ({
@@ -24,14 +21,6 @@ export const actionCreators = {
 
   requestLoginAction: (): AppThunkAction<CallHistoryMethodAction> => (dispatch, getState) => {
     const { loginState } = getState();
-    authenticateUser(loginState)
-      .then((result) => {
-        if (result.status === 200) {
-          setUser(result.data);
-          dispatch(push("/"));
-        }
-      })
-      .catch(({ response }) => console.log(response.data));
   },
 };
 

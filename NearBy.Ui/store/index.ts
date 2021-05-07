@@ -1,8 +1,10 @@
 import { LoginState, reducer as loginReducer } from "./login";
+import { FeedsState, reducer as feedsReducer } from "./feeds";
 
 // The top-level state object
 export interface ApplicationState {
   loginState: LoginState | undefined; 
+  feedsState: FeedsState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -10,6 +12,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
   loginState: loginReducer, 
+  feedsState: feedsReducer
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
