@@ -1,32 +1,66 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
-import Notifications, { INotificatonModel } from "../data/NotificationsData";
-import {getDistanceFeeds} from "../service/FeedsService";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { connect, useSelector } from "react-redux";
 import { ApplicationState } from "../store";
-import { actionCreators, FeedsState} from "../store/feeds";
-
-type HomeScreenProps = FeedsState & typeof actionCreators;
+import {
+  FeedsState,
+  actionCreators as feedActionCreators,
+} from "../store/feeds";
+import {
+  LocationState,
+  actionCreators as locationActionCreators,
+} from "../store/location";
+import Slider from "@react-native-community/slider";
+import { round } from "../utiles/utilits";
+type HomeScreenProps = FeedsState &
+  LocationState &
+  typeof feedActionCreators &
+  typeof locationActionCreators;
 
 const HomeScreen = (props: HomeScreenProps) => {
-  const [notificationsData, setNotification] = useState(
-    [] as INotificatonModel[]
-  );
+  // const locationState: LocationState = useSelector(
+  //   (state) => state.locationState
+  // );
 
-  useState(() => {
+  useEffect(() => {
+    if (props.currentLocation) {
+      props.updateFeedsAction();
+    }
+  }, [props.currentLocation]);
+
+  useEffect(() => {
     props.updateFeedsAction();
-  });
+  }, [props.distanceInKm]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.sliderContainer}>
+        <Slider
+          step={5}
+          style={{ width: 300, height: 40 }}
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+          value={10}
+          onSlidingComplete={(value) => {
+            props.updateDistanceInKmAction(parseInt(value.toString()));
+            console.log("Slider Value Chnaged : ", value);
+          }}
+        />
+        <Text>{props.distanceInKm} Km</Text>
+      </View>
       <FlatList
         style={styles.flatList}
         data={props.data}
         renderItem={({ item }) => {
           return (
             <View style={styles.notificationsContainer}>
-              <View>
+              <View style={styles.titleContainer}>
                 <Text style={styles.title}>{item.title}</Text>
+                {/* <View style={styles.distanceView}> */}
+                  <Text style={styles.title}>{round(item.distance, 1)} Km</Text>
+                {/* </View> */}
               </View>
               <View>
                 <Text>{item.message}</Text>
@@ -34,7 +68,7 @@ const HomeScreen = (props: HomeScreenProps) => {
             </View>
           );
         }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
       {/* <Button title='Find Location' onPress={() => {
         props.navigation.navigate('FindMe');
@@ -45,12 +79,16 @@ const HomeScreen = (props: HomeScreenProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    // borderWidth: 1,
-    borderColor:'red',
-    justifyContent:'center',
-    alignContent:'flex-end',
-    padding : 5,
+    marginTop: 50,
+    borderColor: "red",
+    justifyContent: "center",
+    alignContent: "flex-end",
+    padding: 5,
+  },
+  sliderContainer: {
+    alignItems: "center",
+    margin: 20,
+    flexDirection: "row",
   },
   notificationsContainer: {
     shadowColor: "black",
@@ -61,10 +99,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
-    // margin: 10,
-    margin : 10,
-    borderColor:'blue',
-    // borderWidth:1
+    margin: 10,
+    borderColor: "blue",
   },
   title: {
     fontWeight: "bold",
@@ -72,9 +108,20 @@ const styles = StyleSheet.create({
     color: "black",
   },
   flatList: {
-    // borderWidth: 1,
     borderColor: "black",
   },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: 'space-between'
+  },
+  distanceView: {
+    alignItems:'flex-end'
+  }
 });
 
-export default connect((state: ApplicationState) => state.feedsState, actionCreators)(HomeScreen as any);
+export default connect(
+  (state: ApplicationState) => {
+    return { ...state.feedsState, ...state.locationState };
+  },
+  { ...feedActionCreators, ...locationActionCreators }
+)(HomeScreen as any);

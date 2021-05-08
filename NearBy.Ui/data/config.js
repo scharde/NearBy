@@ -1,10 +1,5 @@
-import Constants from "expo-constants";
-const { manifest } = Constants;
-// const baseUrl = `http://${manifest.debuggerHost.split(':').shift()}:44343/`;
-
-var baseUrl = "https://32f177f61e3b.ngrok.io/";
+var baseUrl = "https://2dd47bcf2f9c.ngrok.io/";
 var apiUrl = `${baseUrl}api/`;
-
 var config = {
   "application": { "title": "Calender" },
   "facebookapi": { "login": "" },

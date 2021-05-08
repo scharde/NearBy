@@ -11,14 +11,15 @@ export interface AuthorizeState {
 
 export type AuthorizeStateProp = AuthorizeState | null;
 
-export const getDistanceFeeds = async () => {
+export const getDistanceFeeds = async (latitude : number, longitude :  number, distanceInKm : number) => {
     const apiUrl = `${config.Api.getDistanceFeed}`;
     var query = new URLSearchParams({
-      latitude : "21.1188015", 
-      longitude : "79.11757",
+      latitude: latitude.toString(), 
+      longitude: longitude.toString(),
       city : "Nagpur",
-      distance : "5"
+      distance : distanceInKm.toString()
     });
     var url = `${apiUrl}?${query.toString()}`;
     return await httpService.get(url);
 };
+ 
