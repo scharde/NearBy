@@ -19,7 +19,7 @@ export const actionCreators = {
       value,
     } as KnownAction),
 
-  requestLoginAction: (): AppThunkAction<CallHistoryMethodAction> => (dispatch, getState) => {
+  requestLoginAction: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
     const { loginState } = getState();
   },
 };

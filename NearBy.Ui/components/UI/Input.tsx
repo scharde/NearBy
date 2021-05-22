@@ -16,7 +16,6 @@ const Input = (props: IInputProps) => {
       <TextInput
         {...props}
         style={styles.input}
-        value={inputState.value}
       />
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
