@@ -6,8 +6,8 @@ import HomeScreen from "../screens/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { actionCreators } from "../store/location";
-import AddFeedsForm from "../screens/AddFeedsForm";
 import AddFeedScreen from "../screens/AddFeedScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +45,7 @@ const TabNavigator = () => {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={AddFeedScreen} />
-        <Tab.Screen name="Add Feed" component={AddFeedsForm} />
+        <Tab.Screen name="Login" component={LoginScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

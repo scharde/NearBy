@@ -5,6 +5,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import { connect } from "react-redux";
 
@@ -19,7 +20,6 @@ import {
 
 type AddFeedScreenProps = AddFeedState & typeof actionCreators;
 const AddFeedScreen = (props: AddFeedScreenProps) => {
-  const [title, setTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -31,14 +31,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
     );
   }
 
-  const inputChangeHandler = (
-    inputIdentifier: string,
-    inputValue: string,
-    inputValidity: string
-  ) => {
-    console.log(inputIdentifier, inputValue, inputValidity);
-  };
-
+  const { sendNewFeeds, inputChangeAction} = props;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -47,6 +40,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
     >
       <ScrollView>
         <View style={styles.form}>
+          <View style={styles.formInputs}>
           <Input
             id="title"
             label="Title"
@@ -57,13 +51,11 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
             returnKeyType="next"
             value={props.title}
             onChangeText={(text) =>
-              props.inputChangeAction({
+              inputChangeAction({
                 value: text,
                 field: addFeedFieldEnum.title,
               })
             }
-            // initialValue={editedProduct ? editedProduct.title : ''}
-            // initiallyValid={!!editedProduct}
           />
           <Input
             id="message"
@@ -73,13 +65,11 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
             returnKeyType="next"
             value={props.message}
             onChangeText={(text) =>
-              props.inputChangeAction({
+              inputChangeAction({
                 value: text,
                 field: addFeedFieldEnum.message,
               })
             }
-            // initialValue={editedProduct ? editedProduct.imageUrl : ''}
-            // initiallyValid={!!editedProduct}
           />
           <Input
             id="city"
@@ -89,7 +79,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
             returnKeyType="next"
             value={props.city}
             onChangeText={(text) =>
-              props.inputChangeAction({
+              inputChangeAction({
                 value: text,
                 field: addFeedFieldEnum.city,
               })
@@ -106,15 +96,16 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
             numberOfLines={3}
             value={props.address}
             onChangeText={(text) =>
-              props.inputChangeAction({
+              inputChangeAction({
                 value: text,
                 field: addFeedFieldEnum.address,
               })
             }
-            // onInputChange={inputChangeHandler}
-            // initialValue={editedProduct ? editedProduct.description : ''}
-            // initiallyValid={!!editedProduct}
           />
+          </View>
+          <View style={styles.submitBtn}>
+              <Button  title="Submit" onPress={sendNewFeeds}/>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -128,8 +119,9 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
+  formInputs: {},
+  submitBtn: {}
 });
 
 // export default AddFeedScreen;

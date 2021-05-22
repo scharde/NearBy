@@ -17,7 +17,7 @@ import Colors from '../constants/Colors';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
-const AddFeedsScreen = () => {
+const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
@@ -84,7 +84,7 @@ const AddFeedsScreen = () => {
   );
 };
 
-AddFeedsScreen.navigationOptions = {
+LoginScreen.navigationOptions = {
   headerTitle: 'Add Feeds'
 };
 
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddFeedsScreen;
+export default LoginScreen;
