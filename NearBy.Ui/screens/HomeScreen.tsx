@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Button, Text, StyleSheet, FlatList } from "react-native";
 import { connect, useSelector } from "react-redux";
 import { ApplicationState } from "../store";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../store/location";
 import Slider from "@react-native-community/slider";
 import { round } from "../utiles/utilits";
+import AddButton from "./AddButton";
 type HomeScreenProps = FeedsState &
   LocationState &
   typeof feedActionCreators &
@@ -43,7 +44,7 @@ const HomeScreen = (props: HomeScreenProps) => {
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
           value={10}
-          onSlidingComplete={(value) => {
+          onSlidingComplete={(value : any) => {
             props.updateDistanceInKmAction(parseInt(value.toString()));
             console.log("Slider Value Chnaged : ", value);
           }}
@@ -70,20 +71,18 @@ const HomeScreen = (props: HomeScreenProps) => {
         }}
         keyExtractor={(item) => item.id.toString()}
       />
-      {/* <Button title='Find Location' onPress={() => {
-        props.navigation.navigate('FindMe');
-      }}></Button> */}
+      <AddButton/>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
     borderColor: "red",
     justifyContent: "center",
     alignContent: "flex-end",
     padding: 5,
+    flex : 1
   },
   sliderContainer: {
     alignItems: "center",

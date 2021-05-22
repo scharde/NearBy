@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
-import FindMeScreen from "../screens/FindMe";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { actionCreators } from "../store/location";
+import AddFeedsForm from "../screens/AddFeedsForm";
+import AddFeedScreen from "../screens/AddFeedScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +24,7 @@ const TabNavigator = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName: string = "ios-information-circle";
+            let iconName: any = "ios-information-circle";
 
             if (route.name === "Home") {
               iconName = focused
@@ -43,7 +44,8 @@ const TabNavigator = () => {
         }}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={FindMeScreen} />
+        <Tab.Screen name="Settings" component={AddFeedScreen} />
+        <Tab.Screen name="Add Feed" component={AddFeedsForm} />
       </Tab.Navigator>
     </NavigationContainer>
   );

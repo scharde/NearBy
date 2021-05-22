@@ -1,4 +1,4 @@
-var baseUrl = "https://2dd47bcf2f9c.ngrok.io/";
+var baseUrl = "https://1c83afcc415c.ngrok.io/";
 var apiUrl = `${baseUrl}api/`;
 var config = {
   "application": { "title": "Calender" },
