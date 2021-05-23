@@ -32,7 +32,13 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
     return <Loader></Loader>;
   }
 
-  const { sendNewFeeds, isCurrentLocation, inputChangeAction, checkboxUpdateAction } = props;
+  const {
+    sendNewFeeds,
+    isCurrentLocation,
+    isFeedSaved,
+    inputChangeAction,
+    checkboxUpdateAction,
+  } = props;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -110,7 +116,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
                 onValueChange={(newValue) => {
                   checkboxUpdateAction({
                     value: newValue,
-                    field: checkboxFieldEnum.isCurrentLocation 
+                    field: checkboxFieldEnum.isCurrentLocation,
                   } as ICheckboxUpdate);
                 }}
                 style={styles.checkbox}
@@ -124,6 +130,8 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
             <Button title="Submit" onPress={sendNewFeeds} />
           </View>
         </View>
+
+        {isFeedSaved ? <View><Text>Congrats, Your feed saved!</Text></View> : null}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -147,7 +155,7 @@ const styles = StyleSheet.create({
   checkbox: {},
   checkboxLabel: {
     paddingTop: 5,
-    fontFamily: 'open-sans-bold'
+    fontFamily: "open-sans-bold",
   },
 });
 

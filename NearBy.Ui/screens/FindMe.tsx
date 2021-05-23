@@ -5,7 +5,6 @@ import Input from "../components/UI/Input";
 
 const FindMeScreen = () => {
   const [address, setAddress] = useState("");
-  
 
   const getLocation = async () => {
       const geoLocation: any =  await Location.geocodeAsync(address);

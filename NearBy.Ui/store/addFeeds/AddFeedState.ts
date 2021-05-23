@@ -3,7 +3,8 @@ export interface AddFeedState {
   message: string;
   city: string;
   address: string;
-  isCurrentLocation: boolean
+  isCurrentLocation: boolean,
+  isFeedSaved: boolean
 }
 
 export const unloadedFeedsState: AddFeedState = {
@@ -11,5 +12,6 @@ export const unloadedFeedsState: AddFeedState = {
   message: "",
   city: "",
   address: "",
-  isCurrentLocation: false
+  isCurrentLocation: false,
+  isFeedSaved: false
 };
