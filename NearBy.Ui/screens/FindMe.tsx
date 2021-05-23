@@ -1,39 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Alert, Button } from "react-native";
 import * as Location from "expo-location";
+import Input from "../components/UI/Input";
 
 const FindMeScreen = () => {
-  const [location, setLocation] = useState({});
-  const [errorMsg, setErrorMsg] = useState("");
+  const [address, setAddress] = useState("");
+  
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-      
-      let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
-      setLocation(location);
-    })();
-  }, []);
-
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
+  const getLocation = async () => {
+      const geoLocation: any =  await Location.geocodeAsync(address);
+      console.log(geoLocation);
   }
-
+ 
   return (
     <View>
       <TouchableOpacity>
         <Text>Find me page</Text>
       </TouchableOpacity>
       <View>
-        <Text style={styles.paragraph}>{text}</Text>
+        <Input id="address"
+            label="Address"
+            errorText="Please enter a valid address!"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            returnKeyType="next"
+            value={address}
+            onChangeText={(text) =>
+              setAddress(text)
+            }></Input>
+            <Button title="Get Location" onPress={getLocation}></Button>
       </View>
     </View>
   );

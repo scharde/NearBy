@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { actionCreators } from "../store/location";
 import AddFeedScreen from "../screens/AddFeedScreen";
 import LoginScreen from "../screens/LoginScreen";
+import FindMeScreen from "../screens/FindMe";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,6 +47,7 @@ const TabNavigator = () => {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={AddFeedScreen} />
         <Tab.Screen name="Login" component={LoginScreen} />
+        <Tab.Screen name="FindMe" component={FindMeScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

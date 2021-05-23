@@ -6,8 +6,11 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
   Button,
+  Text,
 } from "react-native";
+import CheckBox from "@react-native-community/checkbox";
 import { connect } from "react-redux";
+import Loader from "../components/Loader";
 
 import Input from "../components/UI/Input";
 import Colors from "../constants/Colors";
@@ -16,6 +19,8 @@ import {
   actionCreators,
   AddFeedState,
   addFeedFieldEnum,
+  ICheckboxUpdate,
+  checkboxFieldEnum,
 } from "../store/addFeeds";
 
 type AddFeedScreenProps = AddFeedState & typeof actionCreators;
@@ -24,14 +29,10 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
   const [error, setError] = useState();
 
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loader></Loader>;
   }
 
-  const { sendNewFeeds, inputChangeAction} = props;
+  const { sendNewFeeds, isCurrentLocation, inputChangeAction, checkboxUpdateAction } = props;
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -41,70 +42,86 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
       <ScrollView>
         <View style={styles.form}>
           <View style={styles.formInputs}>
-          <Input
-            id="title"
-            label="Title"
-            errorText="Please enter a valid title!"
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
-            value={props.title}
-            onChangeText={(text) =>
-              inputChangeAction({
-                value: text,
-                field: addFeedFieldEnum.title,
-              })
-            }
-          />
-          <Input
-            id="message"
-            label="Message"
-            errorText="Please enter a valid message!"
-            keyboardType="default"
-            returnKeyType="next"
-            value={props.message}
-            onChangeText={(text) =>
-              inputChangeAction({
-                value: text,
-                field: addFeedFieldEnum.message,
-              })
-            }
-          />
-          <Input
-            id="city"
-            label="City"
-            errorText="Please enter a valid city!"
-            keyboardType="default"
-            returnKeyType="next"
-            value={props.city}
-            onChangeText={(text) =>
-              inputChangeAction({
-                value: text,
-                field: addFeedFieldEnum.city,
-              })
-            }
-          />
-          <Input
-            id="address"
-            label="Address"
-            errorText="Please enter a valid Address!"
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            multiline
-            numberOfLines={3}
-            value={props.address}
-            onChangeText={(text) =>
-              inputChangeAction({
-                value: text,
-                field: addFeedFieldEnum.address,
-              })
-            }
-          />
+            <Input
+              id="title"
+              label="Title"
+              errorText="Please enter a valid title!"
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+              value={props.title}
+              onChangeText={(text) =>
+                inputChangeAction({
+                  value: text,
+                  field: addFeedFieldEnum.title,
+                })
+              }
+            />
+            <Input
+              id="message"
+              label="Message"
+              errorText="Please enter a valid message!"
+              keyboardType="default"
+              returnKeyType="next"
+              value={props.message}
+              onChangeText={(text) =>
+                inputChangeAction({
+                  value: text,
+                  field: addFeedFieldEnum.message,
+                })
+              }
+            />
+            <Input
+              id="city"
+              label="City"
+              errorText="Please enter a valid city!"
+              keyboardType="default"
+              returnKeyType="next"
+              value={props.city}
+              onChangeText={(text) =>
+                inputChangeAction({
+                  value: text,
+                  field: addFeedFieldEnum.city,
+                })
+              }
+            />
+            <Input
+              id="address"
+              label="Detail Address"
+              errorText="Please enter a valid Address!"
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              multiline
+              numberOfLines={3}
+              value={props.address}
+              onChangeText={(text) =>
+                inputChangeAction({
+                  value: text,
+                  field: addFeedFieldEnum.address,
+                })
+              }
+            />
+
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                value={isCurrentLocation}
+                onValueChange={(newValue) => {
+                  checkboxUpdateAction({
+                    value: newValue,
+                    field: checkboxFieldEnum.isCurrentLocation 
+                  } as ICheckboxUpdate);
+                }}
+                style={styles.checkbox}
+              />
+              <Text style={styles.checkboxLabel}>
+                Is this your current location?
+              </Text>
+            </View>
           </View>
           <View style={styles.submitBtn}>
-              <Button  title="Submit" onPress={sendNewFeeds}/>
+            <Button title="Submit" onPress={sendNewFeeds} />
           </View>
         </View>
       </ScrollView>
@@ -121,7 +138,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   formInputs: {},
-  submitBtn: {}
+  submitBtn: {},
+  checkboxContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  checkbox: {},
+  checkboxLabel: {
+    paddingTop: 5,
+    fontFamily: 'open-sans-bold'
+  },
 });
 
 // export default AddFeedScreen;
