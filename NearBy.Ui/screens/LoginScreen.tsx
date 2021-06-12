@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useCallback,
+  ReactPropTypes,
+} from "react";
 import {
   ScrollView,
   View,
@@ -6,36 +12,48 @@ import {
   StyleSheet,
   Button,
   ActivityIndicator,
-  Alert
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useDispatch } from 'react-redux';
+  Alert,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { connect, useDispatch } from "react-redux";
 
-import Input from '../components/UI/Input';
-import Card from '../components/UI/Card';
-import Colors from '../constants/Colors';
+import Input from "../components/UI/Input";
+import Card from "../components/UI/Card";
+import Colors from "../constants/Colors";
+import { ApplicationState } from "../store";
+import { actionCreators as authActionCreator, AuthState } from "../store/auth";
 
-const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+type LoginScreenProps = AuthState &
+  typeof authActionCreator &
+  ReactPropTypes &
+  any;
 
-const LoginScreen = () => {
+const LoginScreen = (props: LoginScreenProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (error) {
-      Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
+      Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
     }
   }, [error]);
-  
+
+  useEffect(() => {
+    if (props.token) {
+      props.navigation.navigate("Home");
+    }
+  }, [props.token]);
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={50}
       style={styles.screen}
     >
-      <LinearGradient colors={['#ffedff', '#ffe3ff']} style={styles.gradient}>
+      <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
         <Card style={styles.authContainer}>
           <ScrollView>
             <Input
@@ -44,7 +62,8 @@ const LoginScreen = () => {
               keyboardType="email-address"
               autoCapitalize="none"
               errorText="Please enter a valid email address."
-              // onInputChange={inputChangeHandler}
+              value={username}
+              onChangeText={(text) => setUsername(text)}
             />
             <Input
               id="password"
@@ -53,27 +72,28 @@ const LoginScreen = () => {
               secureTextEntry
               autoCapitalize="none"
               errorText="Please enter a valid password."
-              // onInputChange={inputChangeHandler}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
             />
             <View style={styles.buttonContainer}>
               {isLoading ? (
                 <ActivityIndicator size="small" color={Colors.primary} />
               ) : (
                 <Button
-                  title={isSignup ? 'Sign Up' : 'Login'}
+                  title={isSignup ? "Sign Up" : "Login"}
                   color={Colors.primary}
                   onPress={() => {
-                    console.log('Sign Up button press')
+                    props.requestLoginAction({ username, password });
                   }}
                 />
               )}
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={`Switch to ${isSignup ? 'Login' : 'Sign Up'}`}
+                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
                 color={Colors.accent}
                 onPress={() => {
-                  setIsSignup(prevState => !prevState);
+                  props.requestLoginAction({ username, password });
                 }}
               />
             </View>
@@ -85,27 +105,34 @@ const LoginScreen = () => {
 };
 
 LoginScreen.navigationOptions = {
-  headerTitle: 'Add Feeds'
+  headerTitle: "Add Feeds",
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1
+    flex: 1,
   },
   gradient: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   authContainer: {
-    width: '80%',
+    width: "80%",
     maxWidth: 400,
     maxHeight: 400,
-    padding: 20
+    padding: 20,
   },
   buttonContainer: {
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });
 
-export default LoginScreen;
+// export default LoginScreen;
+
+export default connect(
+  (state: ApplicationState) => {
+    return { ...state.authState };
+  },
+  { ...authActionCreator }
+)(LoginScreen as any);

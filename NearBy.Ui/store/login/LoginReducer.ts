@@ -1,7 +1,13 @@
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "..";
 import { LoginState, unloadedState } from "./LoginState";
-import { USERNAME_ACTION, PASSWORD_ACTION, REMEMBER_ME_CHECK, RESET_LOGIC_FORM, KnownAction } from "./LoginType";
+import {
+  USERNAME_ACTION,
+  PASSWORD_ACTION,
+  REMEMBER_ME_CHECK,
+  RESET_LOGIC_FORM,
+  KnownAction,
+} from "./LoginType";
 
 export const actionCreators = {
   resetLoginAction: () => ({
@@ -19,12 +25,34 @@ export const actionCreators = {
       value,
     } as KnownAction),
 
-  requestLoginAction: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-    const { loginState } = getState();
-  },
+  requestLoginAction:
+    (value: {
+      username: string;
+      password: string;
+    }): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      const { loginState } = getState();
+      if (
+        (value.username == "admin@admin.com", value.password == "admin@123")
+      ) {
+        dispatch({
+          type: "USER_AUTH_SUCCESS_ACTION",
+          value: {
+            username: value.username,
+            token: "sagarcharde",
+            userId: "1",
+          },
+        } as any);
+      } else {
+        dispatch({ type: "USER_AUTH_FAILED_ACTION" } as any);
+      }
+    },
 };
 
-export const reducer: Reducer<LoginState> = (state: LoginState | undefined, incomingAction: Action) => {
+export const reducer: Reducer<LoginState> = (
+  state: LoginState | undefined,
+  incomingAction: Action
+) => {
   const action = incomingAction as any;
 
   if (state === undefined) {

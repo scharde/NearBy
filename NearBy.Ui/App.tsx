@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { SafeAreaView, View } from "react-native";
 import { Provider } from "react-redux";
 import configureStore from "./store/configureStore";
-import TabNavigator from "./navigation/NearByNavigator";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+import NearByNavigationContainer from "./navigation/NavigatorContainer";
 
 const store = configureStore();
 
@@ -33,7 +33,7 @@ const App = () => {
     <Provider store={store}>
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
-          <TabNavigator></TabNavigator>
+          <NearByNavigationContainer />
         </SafeAreaView>
       </View>
     </Provider>

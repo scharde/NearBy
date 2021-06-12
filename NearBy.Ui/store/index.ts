@@ -2,23 +2,26 @@ import { LoginState, reducer as loginReducer } from "./login";
 import { FeedsState, reducer as feedsReducer } from "./feeds";
 import { LocationState, reducer as locationReducer } from "./location";
 import { AddFeedState, reducer as addFeedReducer } from "./addFeeds";
+import { AuthState, reducer as authReducer } from "./auth";
 
 // The top-level state object
 export interface ApplicationState {
-  loginState: LoginState | undefined; 
+  loginState: LoginState | undefined;
   feedsState: FeedsState | undefined;
   locationState: LocationState | undefined;
   addFeedState: AddFeedState | undefined;
+  authState: AuthState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
 // the reducer with the matching name. It's important that the names match exactly, and that the reducer
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
-  loginState: loginReducer, 
+  loginState: loginReducer,
   feedsState: feedsReducer,
   locationState: locationReducer,
-  addFeedState: addFeedReducer
+  addFeedState: addFeedReducer,
+  authState: authReducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
