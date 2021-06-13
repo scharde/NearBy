@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NearBy.Api.Model
+﻿namespace NearBy.Api.Model
 {
     public class NearByNotificationModel
     {

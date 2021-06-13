@@ -6,11 +6,6 @@ const saveData = async (key: string, data: any) => {
 
 const getData = async (key: string) => {
   const result = await SecureStore.getItemAsync(key);
-  if (result) {
-    console.log("Here is the secret value.", result);
-  } else {
-    console.log("Error in getting secret value");
-  }
   return result;
 };
 

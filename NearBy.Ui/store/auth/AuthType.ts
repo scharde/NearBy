@@ -1,6 +1,7 @@
 export const SET_AUTH_DATA_ACTION = "SET_AUTH_DATA_ACTION";
 export const USER_AUTH_SUCCESS_ACTION = "USER_AUTH_SUCCESS_ACTION";
 export const LOGOUT = "LOGOUT";
+export const USER_REGISTER_ACTION = "USER_REGISTER_ACTION";
 
 export interface IAuthDataAction {
   type: typeof SET_AUTH_DATA_ACTION;
@@ -22,4 +23,13 @@ export interface ILogoutAction {
   type: typeof LOGOUT;
 }
 
-export type KnownAction = IAuthDataAction | IAuthSuccessAction | ILogoutAction;
+export interface IUserRegisterAction {
+  type: typeof USER_REGISTER_ACTION;
+  value: { isRegistered: boolean; message?: string };
+}
+
+export type KnownAction =
+  | IAuthDataAction
+  | IAuthSuccessAction
+  | ILogoutAction
+  | IUserRegisterAction;

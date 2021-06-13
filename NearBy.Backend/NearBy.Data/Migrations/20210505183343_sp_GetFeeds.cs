@@ -2,7 +2,7 @@
 
 namespace NearBy.Data.Migrations
 {
-	public partial class sp_GetFeeds : Migration
+    public partial class sp_GetFeeds : Migration
 	{
 		protected override void Up(MigrationBuilder migrationBuilder)
 		{

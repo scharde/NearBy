@@ -40,100 +40,98 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
     checkboxUpdateAction,
   } = props;
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior="padding"
-      keyboardVerticalOffset={100}
-    >
-      <ScrollView>
-        <View style={styles.form}>
-          <View style={styles.formInputs}>
-            <Input
-              id="title"
-              label="Title"
-              errorText="Please enter a valid title!"
-              keyboardType="default"
-              autoCapitalize="sentences"
-              autoCorrect
-              returnKeyType="next"
-              value={props.title}
-              onChangeText={(text) =>
-                inputChangeAction({
-                  value: text,
-                  field: addFeedFieldEnum.title,
-                })
-              }
-            />
-            <Input
-              id="message"
-              label="Message"
-              errorText="Please enter a valid message!"
-              keyboardType="default"
-              returnKeyType="next"
-              value={props.message}
-              onChangeText={(text) =>
-                inputChangeAction({
-                  value: text,
-                  field: addFeedFieldEnum.message,
-                })
-              }
-            />
-            <Input
-              id="city"
-              label="City"
-              errorText="Please enter a valid city!"
-              keyboardType="default"
-              returnKeyType="next"
-              value={props.city}
-              onChangeText={(text) =>
-                inputChangeAction({
-                  value: text,
-                  field: addFeedFieldEnum.city,
-                })
-              }
-            />
-            <Input
-              id="address"
-              label="Detail Address"
-              errorText="Please enter a valid Address!"
-              keyboardType="default"
-              autoCapitalize="sentences"
-              autoCorrect
-              multiline
-              numberOfLines={3}
-              value={props.address}
-              onChangeText={(text) =>
-                inputChangeAction({
-                  value: text,
-                  field: addFeedFieldEnum.address,
-                })
-              }
-            />
+    <ScrollView>
+      <View style={styles.form}>
+        <View style={styles.formInputs}>
+          <Input
+            id="title"
+            label="Title"
+            errorText="Please enter a valid title!"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            returnKeyType="next"
+            value={props.title}
+            onChangeText={(text) =>
+              inputChangeAction({
+                value: text,
+                field: addFeedFieldEnum.title,
+              })
+            }
+          />
+          <Input
+            id="message"
+            label="Message"
+            errorText="Please enter a valid message!"
+            keyboardType="default"
+            returnKeyType="next"
+            value={props.message}
+            onChangeText={(text) =>
+              inputChangeAction({
+                value: text,
+                field: addFeedFieldEnum.message,
+              })
+            }
+          />
+          <Input
+            id="city"
+            label="City"
+            errorText="Please enter a valid city!"
+            keyboardType="default"
+            returnKeyType="next"
+            value={props.city}
+            onChangeText={(text) =>
+              inputChangeAction({
+                value: text,
+                field: addFeedFieldEnum.city,
+              })
+            }
+          />
+          <Input
+            id="address"
+            label="Detail Address"
+            errorText="Please enter a valid Address!"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            multiline
+            numberOfLines={3}
+            value={props.address}
+            onChangeText={(text) =>
+              inputChangeAction({
+                value: text,
+                field: addFeedFieldEnum.address,
+              })
+            }
+          />
 
-            <View style={styles.checkboxContainer}>
-              <CheckBox
-                value={isCurrentLocation}
-                onValueChange={(newValue) => {
-                  checkboxUpdateAction({
-                    value: newValue,
-                    field: checkboxFieldEnum.isCurrentLocation,
-                  } as ICheckboxUpdate);
-                }}
-                style={styles.checkbox}
-              />
-              <Text style={styles.checkboxLabel}>
-                Is this your current location?
-              </Text>
-            </View>
-          </View>
-          <View style={styles.submitBtn}>
-            <Button title="Submit" onPress={sendNewFeeds} />
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              value={isCurrentLocation}
+              onValueChange={(newValue) => {
+                checkboxUpdateAction({
+                  value: newValue,
+                  field: checkboxFieldEnum.isCurrentLocation,
+                } as ICheckboxUpdate);
+              }}
+              style={styles.checkbox}
+            />
+            <Text style={styles.checkboxLabel}>
+              Is this your current location?
+            </Text>
           </View>
         </View>
+        <View style={styles.submitBtn}>
+          <Button title="Submit" onPress={sendNewFeeds} />
+        </View>
+      </View>
 
-        {isFeedSaved ? <View><Text>Congrats, Your feed saved!</Text></View> : null}
-      </ScrollView>
-    </KeyboardAvoidingView>
+      {isFeedSaved ? (
+        <View>
+          <Text>Congrats, Your feed saved!</Text>
+        </View>
+      ) : null}
+    </ScrollView>
   );
 };
 

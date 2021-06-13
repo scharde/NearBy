@@ -48,59 +48,54 @@ const LoginScreen = (props: LoginScreenProps) => {
   }, [props.token]);
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={50}
-      style={styles.screen}
-    >
-      <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
-        <Card style={styles.authContainer}>
-          <ScrollView>
-            <Input
-              id="email"
-              label="E-Mail"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              errorText="Please enter a valid email address."
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-            />
-            <Input
-              id="password"
-              label="Password"
-              keyboardType="default"
-              secureTextEntry
-              autoCapitalize="none"
-              errorText="Please enter a valid password."
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-            />
-            <View style={styles.buttonContainer}>
-              {isLoading ? (
-                <ActivityIndicator size="small" color={Colors.primary} />
-              ) : (
-                <Button
-                  title={isSignup ? "Sign Up" : "Login"}
-                  color={Colors.primary}
-                  onPress={() => {
-                    props.requestLoginAction({ username, password });
-                  }}
-                />
-              )}
-            </View>
-            <View style={styles.buttonContainer}>
+    <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
+      <Card style={styles.authContainer}>
+        <ScrollView>
+          <Input
+            id="email"
+            label="E-Mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            errorText="Please enter a valid email address."
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+          />
+          <Input
+            id="password"
+            label="Password"
+            keyboardType="default"
+            secureTextEntry
+            autoCapitalize="none"
+            errorText="Please enter a valid password."
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <View style={styles.buttonContainer}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color={Colors.primary} />
+            ) : (
               <Button
-                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
-                color={Colors.accent}
+                title={isSignup ? "Sign Up" : "Login"}
+                color={Colors.primary}
                 onPress={() => {
                   props.requestLoginAction({ username, password });
                 }}
               />
-            </View>
-          </ScrollView>
-        </Card>
-      </LinearGradient>
-    </KeyboardAvoidingView>
+            )}
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+              color={Colors.accent}
+              onPress={() => {
+                props.navigation.navigate("Register");
+                // props.requestLoginAction({ username, password });
+              }}
+            />
+          </View>
+        </ScrollView>
+      </Card>
+    </LinearGradient>
   );
 };
 

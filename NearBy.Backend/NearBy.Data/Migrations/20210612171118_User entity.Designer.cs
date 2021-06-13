@@ -10,8 +10,8 @@ using System;
 namespace NearBy.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210502030303_DBCreate")]
-    partial class DBCreate
+    [Migration("20210612171118_User entity")]
+    partial class Userentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -258,10 +258,10 @@ namespace NearBy.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CenterCode")
+                    b.Property<string>("AspNetUsersId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CenterName")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -270,10 +270,10 @@ namespace NearBy.Data.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Token")
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

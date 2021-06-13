@@ -1,11 +1,18 @@
 export interface AuthState {
-  token: string | null;
-  userId: string | null;
-  username: string | null;
+  authData: {
+    token: string | null;
+    userId: string | null;
+    username: string | null;
+  };
+  registerUser:
+    | {
+        isRegistered: boolean;
+        message?: string;
+      }
+    | undefined;
 }
 
 export const unloadedState: AuthState = {
-  token: null,
-  userId: null,
-  username: null,
+  authData: { token: null, userId: null, username: null },
+  registerUser: undefined,
 };

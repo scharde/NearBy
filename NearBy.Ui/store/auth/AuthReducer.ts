@@ -1,15 +1,17 @@
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "..";
 import { AuthState, unloadedState } from "./AuthState";
+import { IRegisterUserProps, registerUser } from "../../service/AuthService";
 import {
-  IAuthDataAction,
   IAuthUserData,
   KnownAction,
   SET_AUTH_DATA_ACTION,
   USER_AUTH_SUCCESS_ACTION,
   LOGOUT,
+  USER_REGISTER_ACTION,
 } from "./AuthType";
 import { saveData, deleteData } from "../../utiles/secureStore";
+import { Localication } from "../../Localization";
 
 export const actionCreators = {
   setAuthData: (data: IAuthUserData) => ({
@@ -47,6 +49,31 @@ export const actionCreators = {
       dispatch({ type: LOGOUT });
       console.log("Logout done");
     },
+
+  registerUserAction:
+    (data: IRegisterUserProps): AppThunkAction<KnownAction> =>
+    (dispatch, getState) => {
+      registerUser(data)
+        .then((result) => {
+          dispatch({
+            type: USER_REGISTER_ACTION,
+            value: {
+              isRegistered: true,
+              message: Localication.UserRegistredMessage,
+            },
+          });
+        })
+        .catch((error) => {
+          console.log("Error in user registration", error);
+          dispatch({
+            type: USER_REGISTER_ACTION,
+            value: {
+              isRegistered: false,
+              message: Localication.UserRegistredMessage_Failed,
+            },
+          });
+        });
+    },
 };
 
 const saveDataToStorage = (token: string, userId: string, username: string) => {
@@ -74,9 +101,12 @@ export const reducer: Reducer<AuthState> = (
     case USER_AUTH_SUCCESS_ACTION:
     case SET_AUTH_DATA_ACTION:
       const { token, userId, username } = action.value;
-      return { token, userId, username };
+      return { ...state, authData: { token, userId, username } };
     case LOGOUT:
       return { ...unloadedState };
+    case USER_REGISTER_ACTION:
+      const { isRegistered, message } = action.value;
+      return { ...state, registerUser: { isRegistered, message } };
   }
   return state;
 };

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NearBy.Data.Context;
+using NearBy.Infrastructure;
 
 namespace NearBy.Api
 {
@@ -24,9 +25,9 @@ namespace NearBy.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection"), x => x.UseNetTopologySuite()));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<DatabaseContext>();
-
+            IdentitySettings.SetIdentity(services);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -48,6 +49,7 @@ namespace NearBy.Api
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
