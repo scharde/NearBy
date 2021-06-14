@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NearBy.Data.Context;
-using NearBy.Data.Interfaces;
+using NearBy.Data.IAsyncRepository;
 using System;
 using System.Collections.Generic;
 using System.Data;

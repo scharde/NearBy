@@ -1,15 +1,23 @@
 import { Action, Reducer } from "redux";
 import { AppThunkAction } from "..";
-import { AuthState, unloadedState } from "./AuthState";
-import { IRegisterUserProps, registerUser } from "../../service/AuthService";
 import {
+  AuthState,
+  unloadedState,
   IAuthUserData,
   KnownAction,
   SET_AUTH_DATA_ACTION,
   USER_AUTH_SUCCESS_ACTION,
   LOGOUT,
   USER_REGISTER_ACTION,
-} from "./AuthType";
+} from "./AuthState";
+import {
+  IRegisterUserProps,
+  registerUser,
+  login,
+  ILoginProps,
+} from "../../service/AuthService";
+import httpService from "../../service/HttpService";
+
 import { saveData, deleteData } from "../../utiles/secureStore";
 import { Localication } from "../../Localization";
 
@@ -20,27 +28,20 @@ export const actionCreators = {
   }),
 
   requestLoginAction:
-    (value: {
-      username: string;
-      password: string;
-    }): AppThunkAction<KnownAction> =>
+    (data: ILoginProps): AppThunkAction<KnownAction> =>
     (dispatch, getState) => {
-      if (
-        (value.username == "admin@admin.com", value.password == "admin@123")
-      ) {
-        const token: string = "sagarcharde";
-        dispatch({
-          type: USER_AUTH_SUCCESS_ACTION,
-          value: {
-            username: value.username,
-            token,
-            userId: "1",
-          },
-        } as KnownAction);
-        saveDataToStorage(token, value.username, "1");
-      } else {
-        dispatch({ type: "USER_AUTH_FAILED_ACTION" } as any);
-      }
+      login(data)
+        .then((result) => {
+          console.log(result.data);
+          saveDataToStorage(result.data as IAuthUserData);
+          dispatch({
+            type: USER_AUTH_SUCCESS_ACTION,
+            value: result.data as IAuthUserData,
+          } as KnownAction);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
   requestLogoutAction:
@@ -55,6 +56,7 @@ export const actionCreators = {
     (dispatch, getState) => {
       registerUser(data)
         .then((result) => {
+          console.log("User Registered", result);
           dispatch({
             type: USER_REGISTER_ACTION,
             value: {
@@ -76,15 +78,8 @@ export const actionCreators = {
     },
 };
 
-const saveDataToStorage = (token: string, userId: string, username: string) => {
-  saveData(
-    "UserData",
-    JSON.stringify({
-      token: token,
-      userId: userId,
-      username: username,
-    })
-  );
+const saveDataToStorage = (data: IAuthUserData) => {
+  saveData("UserData", JSON.stringify(data));
 };
 
 export const reducer: Reducer<AuthState> = (
@@ -100,8 +95,8 @@ export const reducer: Reducer<AuthState> = (
   switch (action.type) {
     case USER_AUTH_SUCCESS_ACTION:
     case SET_AUTH_DATA_ACTION:
-      const { token, userId, username } = action.value;
-      return { ...state, authData: { token, userId, username } };
+      httpService.setJwt(action.value.token);
+      return { ...state, authData: action.value };
     case LOGOUT:
       return { ...unloadedState };
     case USER_REGISTER_ACTION:

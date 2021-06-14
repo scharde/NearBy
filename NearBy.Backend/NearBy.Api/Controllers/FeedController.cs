@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace NearBy.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FeedController : ControllerBase

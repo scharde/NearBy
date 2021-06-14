@@ -9,7 +9,6 @@ import { actionCreators as authActionCreator, AuthState } from "../store/auth";
 import LoginScreen from "../screens/LoginScreen";
 import { getData } from "../utiles/secureStore";
 import RegisterScreen from "../screens/RegisterScreen";
-
 const RootNavigationStack = createStackNavigator();
 type navigatorContainerProps = AuthState & any;
 const NearByNavigationContainer = (props: navigatorContainerProps) => {
@@ -27,7 +26,7 @@ const NearByNavigationContainer = (props: navigatorContainerProps) => {
   return (
     <NavigationContainer>
       <RootNavigationStack.Navigator>
-        {!props.token ? (
+        {!props.authData.token ? (
           <>
             <RootNavigationStack.Screen name="Login" component={LoginScreen} />
             <RootNavigationStack.Screen

@@ -1,4 +1,3 @@
-using CenterAdmin.Infra;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NearBy.Data.Context;
 using NearBy.Infrastructure;
+using NearBy.Infrastructure.JwtMiddleware;
 
 namespace NearBy.Api
 {
@@ -33,7 +33,6 @@ namespace NearBy.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NearBy.Api", Version = "v1" });
             });
-
             Infra.Configure(services, Configuration);
         }
 
@@ -49,10 +48,12 @@ namespace NearBy.Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace NearBy.Data.Interfaces
+namespace NearBy.Data.IAsyncRepository
 {
     public interface IAsyncRepository<T> where T : BaseEntity
     {

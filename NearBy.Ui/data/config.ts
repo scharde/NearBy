@@ -9,6 +9,7 @@ var config = {
   Api: {
     getDistanceFeed: `${apiUrl}Feed`,
     registerUser: `${apiUrl}Auth/Register`,
+    login: `${apiUrl}Auth/Login`,
   },
 };
 

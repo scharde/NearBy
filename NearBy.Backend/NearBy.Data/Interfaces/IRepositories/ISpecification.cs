@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace NearBy.Data.Interfaces
+namespace NearBy.Data.IAsyncRepository
 {
     public interface ISpecification<T>
     {

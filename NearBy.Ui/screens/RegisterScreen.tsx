@@ -1,5 +1,5 @@
 // SignUp.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Button, TextInput, StyleSheet, Text } from "react-native";
 import Card from "../components/UI/Card";
 import { LinearGradient } from "expo-linear-gradient";
@@ -10,14 +10,15 @@ import { actionCreators as authActionCreator, AuthState } from "../store/auth";
 type RegisterScreenProps = AuthState & typeof authActionCreator & any;
 
 const RegisterScreen = (props: RegisterScreenProps) => {
-  const [data, setData] = useState({
+  const unloadedData = {
     firstName: "",
     lastName: "",
     username: "",
     password: "",
     email: "",
     phoneNumber: "",
-  });
+  };
+  const [data, setData] = useState(unloadedData);
   const onChangeText = (key: string, val: string) => {
     const newData: any = { ...data };
     newData[key] = val;
@@ -32,6 +33,12 @@ const RegisterScreen = (props: RegisterScreenProps) => {
     }
   };
 
+  useEffect(() => {
+    if (props.registerUser?.isRegistered) {
+      setData(unloadedData);
+    }
+  }, [props.registerUser?.isRegistered]);
+
   const { firstName, lastName, username, password, email, phoneNumber } = data;
   return (
     <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
@@ -42,6 +49,7 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={firstName}
           onChangeText={(val) => onChangeText("firstName", val)}
+          returnKeyType="next"
         />
         <TextInput
           style={styles.input}
@@ -49,6 +57,7 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={lastName}
           onChangeText={(val) => onChangeText("lastName", val)}
+          returnKeyType="next"
         />
         <TextInput
           style={styles.input}
@@ -56,6 +65,7 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={username}
           onChangeText={(val) => onChangeText("username", val)}
+          returnKeyType="next"
         />
         <TextInput
           style={styles.input}
@@ -64,6 +74,7 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={password}
           onChangeText={(val) => onChangeText("password", val)}
+          returnKeyType="next"
         />
         <TextInput
           style={styles.input}
@@ -71,6 +82,7 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={email}
           onChangeText={(val) => onChangeText("email", val)}
+          returnKeyType="next"
         />
         <TextInput
           style={styles.input}
@@ -78,13 +90,22 @@ const RegisterScreen = (props: RegisterScreenProps) => {
           autoCapitalize="none"
           value={phoneNumber}
           onChangeText={(val) => onChangeText("phoneNumber", val)}
+          returnKeyType="next"
         />
         <View style={styles.button}>
           <Button title="Sign Up" onPress={signUp} />
         </View>
         <View style={styles.msgContainer}>
           {props.registerUser?.message ? (
-            <Text style={styles.msg}>{props.registerUser.message}</Text>
+            <Text
+              style={
+                props.registerUser?.isRegistered
+                  ? styles.msg_succes
+                  : styles.msg_failed
+              }
+            >
+              {props.registerUser.message}
+            </Text>
           ) : null}
         </View>
       </Card>
@@ -123,8 +144,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
   },
-  msg: {
+  msg_failed: {
     color: "red",
+  },
+  msg_succes: {
+    color: "green",
   },
 });
 

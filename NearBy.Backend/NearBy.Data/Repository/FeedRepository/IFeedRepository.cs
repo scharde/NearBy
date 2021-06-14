@@ -1,5 +1,5 @@
 ﻿using NearBy.Data.Context.Entity.Feed;
-using NearBy.Data.Interfaces;
+using NearBy.Data.IAsyncRepository;
 using NearBy.Data.Repository;
 using NearBy.Model.Feeds;
 using System.Collections.Generic;

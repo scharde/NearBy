@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 using NearBy.Data.Context;
 using NearBy.Data.Context.Entity.User;
 using NearBy.Model;
 using NearBy.Model.Response;
+using NearBy.Model.User;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NearBy.Data.Repository.AuthRepository
@@ -11,17 +14,22 @@ namespace NearBy.Data.Repository.AuthRepository
     public class AuthRepository : Repository<UserEntity>, IAuthRepository
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private IMapper _mapper;
+
         //private readonly IEmailSender _sender;
-        public AuthRepository(UserManager<IdentityUser> userManager, DatabaseContext databaseContext) : base(databaseContext)
+        public AuthRepository(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IMapper mapper, DatabaseContext databaseContext) : base(databaseContext)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
+            _mapper = mapper;
         }
 
-        public async Task<ResponseModel> CreateUser(UserRegisterModel userRegisterModel)
+        public async Task<ResponseModel> CreateUser(UserRegistrationModel userRegisterModel)
         {
             using (IDbContextTransaction transaction = _dbContext.Database.BeginTransaction())
             {
-                var user = new IdentityUser { UserName = userRegisterModel.Email, Email = userRegisterModel.Email };
+                var user = new IdentityUser { UserName = userRegisterModel.UserName, Email = userRegisterModel.Email };
                 var result = await _userManager.CreateAsync(user, userRegisterModel.Password);
                 if (result.Succeeded)
                 {
@@ -67,16 +75,11 @@ namespace NearBy.Data.Repository.AuthRepository
             };
         }
 
-        public async Task<ResponseModel> CreateUserRecord(UserRegisterModel userRegisterModel, string aspNetUsersId)
+        public async Task<ResponseModel> CreateUserRecord(UserRegistrationModel userRegisterModel, string aspNetUsersId)
         {
-            _dbContext.Users.Add(new UserEntity
-            {
-                FirstName = userRegisterModel.FirstName,
-                LastName = userRegisterModel.LastName,
-                Email = userRegisterModel.Email,
-                AspNetUsersId = aspNetUsersId,
-                PhoneNumber = userRegisterModel.PhoneNumber,
-            });
+            UserEntity userEntity = _mapper.Map<UserRegistrationModel, UserEntity>(userRegisterModel);
+            userEntity.AspNetUsersId = aspNetUsersId;
+            _dbContext.Users.Add(userEntity);
             int result = await _dbContext.SaveChangesAsync();
             if (result > 0)
             {
@@ -84,6 +87,22 @@ namespace NearBy.Data.Repository.AuthRepository
             }
             return new ResponseModel { Status = false, Failed = new FailedModel { Message = "Error in User registration" } };
 
+        }
+
+        public async Task<UserModel> Login(LoginModel model)
+        {
+            SignInResult result = await _signInManager.PasswordSignInAsync(model.UserName,
+                           model.Password, model.RememberMe, lockoutOnFailure: true);
+            if (result.Succeeded)
+            {
+                UserEntity userEntity = _dbContext.Users.FirstOrDefault(x => x.UserName == model.UserName);
+                if (userEntity != null)
+                {
+                    UserModel userModel = _mapper.Map<UserEntity, UserModel>(userEntity);
+                    return userModel;
+                }
+            }
+            return null;
         }
     }
 }

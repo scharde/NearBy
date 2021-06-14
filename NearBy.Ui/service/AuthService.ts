@@ -10,9 +10,22 @@ interface IRegisterUserProps {
   phoneNumber: string;
 }
 
-const registerUser = async (userData: IRegisterUserProps) => {
-  const url = `${config.Api.registerUser}`;
-  await httpService.post(url, userData);
+interface ILoginProps {
+  username: string;
+  password: string;
+  rememberMe: boolean;
+}
+
+const login = async (data: ILoginProps) => {
+  const url = `${config.Api.login}`;
+  const result = await httpService.post(url, data);
+  return result;
 };
 
-export { registerUser, IRegisterUserProps };
+const registerUser = async (userData: IRegisterUserProps) => {
+  const url = `${config.Api.registerUser}`;
+  const result = await httpService.post(url, userData);
+  return result;
+};
+
+export { registerUser, IRegisterUserProps, ILoginProps, login };

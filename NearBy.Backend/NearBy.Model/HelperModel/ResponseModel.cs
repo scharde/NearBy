@@ -8,9 +8,10 @@
     }
 
     public class SuccessModel
-    { 
+    {
         public int Id { get; set; }
         public string Message { get; set; }
+        public BaseModel model { get; set; }
     }
 
 
