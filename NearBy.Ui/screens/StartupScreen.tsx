@@ -10,18 +10,19 @@ const StartupScreen = (props: any) => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem("userData");
       if (!userData) {
-        props.navigation.navigate("Auth");
+        props.navigation.navigate("Login");
         return;
       }
 
       const transformedData = JSON.parse(userData);
-      const { token, username, userId } = transformedData;
-      //   const expirationDate = new Date(expiryDate);
-      //   if (expirationDate <= new Date() || !token || !userId) {
-      //     props.navigation.navigate('Auth');
-      //     return;
-      //   }
-      //   const expirationTime = expirationDate.getTime() - new Date().getTime();
+      const { token, username, userId, expiryDate } = transformedData;
+      const expirationDate = new Date(expiryDate);
+      if (expirationDate <= new Date() || !token || !userId) {
+        props.navigation.navigate("Login");
+        return;
+      }
+      const expirationTime = expirationDate.getTime() - new Date().getTime();
+      props.navigation.navigate("Home");
       dispatch({
         type: "USER_AUTH_SUCCESS_ACTION",
         value: {
@@ -30,7 +31,6 @@ const StartupScreen = (props: any) => {
           userId,
         },
       });
-      props.navigation.navigate("Home");
     };
     tryLogin();
   }, [dispatch]);

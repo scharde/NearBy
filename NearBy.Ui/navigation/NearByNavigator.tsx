@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
@@ -11,12 +11,10 @@ import FindMeScreen from "../screens/FindMe";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  console.log("Tab navigator");
   const dispatch = useDispatch();
-  dispatch(actionCreators.updateLocationAction());
-  // useEffect(() => {
-  //   dispatch(actionCreators.updateLocationAction());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(actionCreators.updateLocationAction());
+  }, [dispatch]);
 
   return (
     <Tab.Navigator
@@ -32,7 +30,6 @@ const TabNavigator = () => {
             iconName = "ios-list";
           }
 
-          // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
@@ -41,9 +38,21 @@ const TabNavigator = () => {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Settings" component={AddFeedScreen} />
-      <Tab.Screen name="FindMe" component={FindMeScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: "Home" }}
+      />
+      <Tab.Screen
+        name="AddFeeds"
+        component={AddFeedScreen}
+        options={{ title: "Add Feed" }}
+      />
+      <Tab.Screen
+        name="FindMe"
+        component={FindMeScreen}
+        options={{ title: "Find Me" }}
+      />
     </Tab.Navigator>
   );
 };

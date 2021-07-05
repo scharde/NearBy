@@ -2,8 +2,8 @@ import httpService from "./HttpService";
 import { config } from "../data/config";
 
 interface IRegisterUserProps {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   userName: string;
   password: string;
   email: string;

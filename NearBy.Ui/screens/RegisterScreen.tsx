@@ -1,36 +1,43 @@
 // SignUp.js
 import React, { useEffect, useState } from "react";
-import { View, Button, TextInput, StyleSheet, Text } from "react-native";
-import Card from "../components/UI/Card";
-import { LinearGradient } from "expo-linear-gradient";
+import { View, StyleSheet, Text, Image } from "react-native";
 import { connect } from "react-redux";
 import { ApplicationState } from "../store";
 import { actionCreators as authActionCreator, AuthState } from "../store/auth";
+import Input from "../components/PrimaryInputForm";
+import PrimaryButton from "../components/PrimaryButton";
+import { colors } from "../constants/Colors";
+import { registerUser, IRegisterUserProps } from "../service/AuthService";
 
-type RegisterScreenProps = AuthState & typeof authActionCreator & any;
+type RegisterScreenProps = AuthState &
+  typeof authActionCreator & { navigation: any };
 
 const RegisterScreen = (props: RegisterScreenProps) => {
-  const unloadedData = {
+  const unloadedData: IRegisterUserProps = {
     firstName: "",
     lastName: "",
-    username: "",
+    userName: "",
     password: "",
     email: "",
     phoneNumber: "",
   };
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(unloadedData);
+  const [btnDisabled, setBtnDisabled] = useState(true);
+
   const onChangeText = (key: string, val: string) => {
     const newData: any = { ...data };
     newData[key] = val;
     setData(newData);
   };
   const signUp = async () => {
-    try {
-      props.registerUserAction(data);
-      console.log("user successfully signed up!: ");
-    } catch (err) {
-      console.log("error signing up: ", err);
-    }
+    registerUser(data)
+      .then((result) => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -39,116 +46,138 @@ const RegisterScreen = (props: RegisterScreenProps) => {
     }
   }, [props.registerUser?.isRegistered]);
 
-  const { firstName, lastName, username, password, email, phoneNumber } = data;
+  const { firstName, lastName, userName, password, email, phoneNumber } = data;
   return (
-    <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
-      <Card style={styles.card}>
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          autoCapitalize="none"
-          value={firstName}
-          onChangeText={(val) => onChangeText("firstName", val)}
-          returnKeyType="next"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Last Name"
-          autoCapitalize="none"
-          value={lastName}
-          onChangeText={(val) => onChangeText("lastName", val)}
-          returnKeyType="next"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          autoCapitalize="none"
-          value={username}
-          onChangeText={(val) => onChangeText("username", val)}
-          returnKeyType="next"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          autoCapitalize="none"
-          value={password}
-          onChangeText={(val) => onChangeText("password", val)}
-          returnKeyType="next"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={(val) => onChangeText("email", val)}
-          returnKeyType="next"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          autoCapitalize="none"
-          value={phoneNumber}
-          onChangeText={(val) => onChangeText("phoneNumber", val)}
-          returnKeyType="next"
-        />
-        <View style={styles.button}>
-          <Button title="Sign Up" onPress={signUp} />
+    <View style={styles.container}>
+      <View style={styles.sectionTop}></View>
+      <View style={styles.sectionMiddle}>
+        <View>
+          <Image
+            resizeMode={"contain"}
+            style={styles.avatarImg}
+            source={require("../assets/images/avatar.jpg")}
+          ></Image>
         </View>
-        <View style={styles.msgContainer}>
-          {props.registerUser?.message ? (
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="First Name"
+            autoCapitalize="none"
+            value={firstName}
+            onChangeText={(val) => onChangeText("firstName", val)}
+            returnKeyType="next"
+          />
+        </View>
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="Last Name"
+            autoCapitalize="none"
+            value={lastName}
+            onChangeText={(val) => onChangeText("lastName", val)}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={(val) => onChangeText("email", val)}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="Username"
+            autoCapitalize="none"
+            value={userName}
+            onChangeText={(val) => onChangeText("userName", val)}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="Password"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            value={password}
+            onChangeText={(val) => onChangeText("password", val)}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputItem}>
+          <Input
+            placeholder="Phone Number"
+            autoCapitalize="none"
+            keyboardType="number-pad"
+            value={phoneNumber}
+            onChangeText={(val) => onChangeText("phoneNumber", val)}
+            returnKeyType="next"
+          />
+        </View>
+
+        <View style={styles.inputItem}>
+          <PrimaryButton
+            buttonBg={colors.primary}
+            textColor={colors.secondary}
+            label={"Sign Up"}
+            isLoading={isLoading}
+            disabled={btnDisabled}
+            onPress={signUp}
+          />
+        </View>
+      </View>
+      <View style={styles.sectionBottom}>
+        <View style={styles.bottomContainer}>
+          <Text style={styles.footerTitle}>
+            <Text style={styles.loginText}>Already have an account? </Text>
             <Text
-              style={
-                props.registerUser?.isRegistered
-                  ? styles.msg_succes
-                  : styles.msg_failed
-              }
+              style={styles.link}
+              onPress={() => {
+                props.navigation.navigate("Login");
+              }}
             >
-              {props.registerUser.message}
+              Log in.
             </Text>
-          ) : null}
+          </Text>
         </View>
-      </Card>
-    </LinearGradient>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: { padding: 10 },
-  card: { width: "90%" },
-  input: {
-    width: "95%",
-    height: 45,
-    margin: 5,
-    marginRight: 20,
-    padding: 5,
-    fontSize: 16,
-    fontWeight: "500",
-    borderBottomColor: "grey",
-    borderBottomWidth: 0.5,
-    borderRadius: 10,
-  },
+  sectionTop: { display: "flex", flex: 1, justifyContent: "flex-start" },
+  sectionMiddle: { display: "flex", flex: 1, justifyContent: "center" },
+  sectionBottom: { display: "flex", flex: 1, justifyContent: "flex-end" },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
+    display: "flex",
   },
-  gradient: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  inputItem: { marginBottom: 15, marginLeft: 25, marginRight: 25 },
+  bottomContainer: {
+    borderTopWidth: 1,
+    borderColor: colors.gray1,
+    padding: 15,
   },
-  msgContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
+  footerTitle: {
+    textAlign: "center",
   },
-  msg_failed: {
-    color: "red",
+  link: {
+    color: colors.black,
+    fontWeight: "600",
+    marginTop: 50,
   },
-  msg_succes: {
-    color: "green",
+  avatarImg: {
+    width: "100%",
+    height: "50%",
+  },
+  loginText: {
+    color: colors.gray,
   },
 });
 

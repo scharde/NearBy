@@ -17,6 +17,7 @@ import {
   ILoginProps,
 } from "../../service/AuthService";
 import httpService from "../../service/HttpService";
+import Keys from "../../constants/Keys";
 
 import { saveData, deleteData } from "../../utiles/secureStore";
 import { Localication } from "../../Localization";
@@ -27,59 +28,52 @@ export const actionCreators = {
     value: data,
   }),
 
-  requestLoginAction:
-    (data: ILoginProps): AppThunkAction<KnownAction> =>
+  loginSuccessAction:
+    (data: IAuthUserData): AppThunkAction<KnownAction> =>
     (dispatch, getState) => {
-      login(data)
-        .then((result) => {
-          console.log(result.data);
-          saveDataToStorage(result.data as IAuthUserData);
-          dispatch({
-            type: USER_AUTH_SUCCESS_ACTION,
-            value: result.data as IAuthUserData,
-          } as KnownAction);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      saveDataToStorage(data as IAuthUserData);
+      dispatch({
+        type: USER_AUTH_SUCCESS_ACTION,
+        value: data as IAuthUserData,
+      } as KnownAction);
     },
 
   requestLogoutAction:
     (): AppThunkAction<KnownAction> => (dispatch, getState) => {
-      deleteData("UserData");
+      deleteData(Keys.UserData);
       dispatch({ type: LOGOUT });
       console.log("Logout done");
     },
 
-  registerUserAction:
-    (data: IRegisterUserProps): AppThunkAction<KnownAction> =>
-    (dispatch, getState) => {
-      registerUser(data)
-        .then((result) => {
-          console.log("User Registered", result);
-          dispatch({
-            type: USER_REGISTER_ACTION,
-            value: {
-              isRegistered: true,
-              message: Localication.UserRegistredMessage,
-            },
-          });
-        })
-        .catch((error) => {
-          console.log("Error in user registration", error);
-          dispatch({
-            type: USER_REGISTER_ACTION,
-            value: {
-              isRegistered: false,
-              message: Localication.UserRegistredMessage_Failed,
-            },
-          });
-        });
-    },
+  // registerUserAction:
+  //   (data: IRegisterUserProps): AppThunkAction<KnownAction> =>
+  //   (dispatch, getState) => {
+  //     registerUser(data)
+  //       .then((result) => {
+  //         console.log("User Registered", result);
+  //         dispatch({
+  //           type: USER_REGISTER_ACTION,
+  //           value: {
+  //             isRegistered: true,
+  //             message: Localication.UserRegistredMessage,
+  //           },
+  //         });
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error in user registration", error);
+  //         dispatch({
+  //           type: USER_REGISTER_ACTION,
+  //           value: {
+  //             isRegistered: false,
+  //             message: Localication.UserRegistredMessage_Failed,
+  //           },
+  //         });
+  //       });
+  //   },
 };
 
 const saveDataToStorage = (data: IAuthUserData) => {
-  saveData("UserData", JSON.stringify(data));
+  saveData(Keys.UserData, JSON.stringify(data));
 };
 
 export const reducer: Reducer<AuthState> = (
@@ -98,6 +92,7 @@ export const reducer: Reducer<AuthState> = (
       httpService.setJwt(action.value.token);
       return { ...state, authData: action.value };
     case LOGOUT:
+      httpService.setJwt(null);
       return { ...unloadedState };
     case USER_REGISTER_ACTION:
       const { isRegistered, message } = action.value;

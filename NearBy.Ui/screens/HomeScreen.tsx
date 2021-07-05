@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { View, Button, Text, StyleSheet, FlatList } from "react-native";
-import { connect, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { connect } from "react-redux";
 import { ApplicationState } from "../store";
 import {
   FeedsState,
@@ -44,9 +44,9 @@ const HomeScreen = (props: HomeScreenProps) => {
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
           value={10}
-          onSlidingComplete={(value : any) => {
+          onSlidingComplete={(value: any) => {
             props.updateDistanceInKmAction(parseInt(value.toString()));
-            console.log("Slider Value Chnaged : ", value);
+            console.log("Slider Value Changed : ", value);
           }}
         />
         <Text>{props.distanceInKm} Km</Text>
@@ -60,7 +60,7 @@ const HomeScreen = (props: HomeScreenProps) => {
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{item.title}</Text>
                 {/* <View style={styles.distanceView}> */}
-                  <Text style={styles.title}>{round(item.distance, 1)} Km</Text>
+                <Text style={styles.title}>{round(item.distance, 1)} Km</Text>
                 {/* </View> */}
               </View>
               <View>
@@ -71,7 +71,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         }}
         keyExtractor={(item) => item.id.toString()}
       />
-      <AddButton/>
+      <AddButton />
     </View>
   );
 };
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "flex-end",
     padding: 5,
-    flex : 1
+    flex: 1,
   },
   sliderContainer: {
     alignItems: "center",
@@ -111,11 +111,11 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "row",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   distanceView: {
-    alignItems:'flex-end'
-  }
+    alignItems: "flex-end",
+  },
 });
 
 export default connect(

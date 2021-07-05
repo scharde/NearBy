@@ -1,133 +1,150 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useCallback,
-  ReactPropTypes,
-} from "react";
-import {
-  ScrollView,
-  View,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Button,
-  ActivityIndicator,
-  Alert,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { connect, useDispatch } from "react-redux";
+import React, { Component } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { colors } from "../constants/Colors";
+// import Icon from 'react-native-vector-icons';
+import PrimaryInputForm from "../components/PrimaryInputForm";
+import PrimaryButton from "../components/PrimaryButton";
+export class LoginScreen extends Component {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      languageModalVisible: false,
+    };
+  }
 
-import Input from "../components/UI/Input";
-import Card from "../components/UI/Card";
-import Colors from "../constants/Colors";
-import { ApplicationState } from "../store";
-import { actionCreators as authActionCreator, AuthState } from "../store/auth";
-
-type LoginScreenProps = AuthState &
-  typeof authActionCreator &
-  ReactPropTypes &
-  any;
-
-const LoginScreen = (props: LoginScreenProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState();
-  const [isSignup, setIsSignup] = useState(false);
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (props.token) {
-      props.navigation.navigate("Home");
-    }
-  }, [props.token]);
-
-  return (
-    <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
-      <Card style={styles.authContainer}>
-        <ScrollView>
-          <Input
-            id="email"
-            label="E-Mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            errorText="Please enter a valid email address."
-            value={username}
-            onChangeText={(text) => setUsername(text)}
-          />
-          <Input
-            id="password"
-            label="Password"
-            keyboardType="default"
-            secureTextEntry
-            autoCapitalize="none"
-            errorText="Please enter a valid password."
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-          <View style={styles.buttonContainer}>
-            {isLoading ? (
-              <ActivityIndicator size="small" color={Colors.primary} />
-            ) : (
-              <Button
-                title={isSignup ? "Sign Up" : "Login"}
-                color={Colors.primary}
-                onPress={() => {
-                  props.requestLoginAction({ username, password });
-                }}
-              />
-            )}
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
-              color={Colors.accent}
+  handleClick = () => {
+    // const flag : boolean = this.state.languageModalVisible;
+    // this.setState({languageModalVisible: !this.state.languageModalVisible});
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.sectionTop}>
+          <View style={styles.languageContainer}>
+            <TouchableOpacity
               onPress={() => {
-                props.navigation.navigate("Register");
-                // props.requestLoginAction({ username, password });
+                this.handleClick();
               }}
+            >
+              <Text>
+                <Text>English (United States) </Text>
+                {/* <Icon name="caret-down" /> */}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.sectionMiddle}>
+          <View>
+            <Image
+              resizeMode={"contain"}
+              style={styles.instaLogo}
+              source={require("../assets/images/instagramLogo.png")}
             />
           </View>
-        </ScrollView>
-      </Card>
-    </LinearGradient>
-  );
-};
 
-LoginScreen.navigationOptions = {
-  headerTitle: "Add Feeds",
-};
+          <View style={styles.inputItem}>
+            <PrimaryInputForm placeholder={"Phone Number ,Email or Password"} />
+          </View>
 
-const styles = StyleSheet.create({
-  screen: {
+          <View style={styles.inputItem}>
+            <PrimaryInputForm placeholder={"Password"} />
+          </View>
+
+          <View style={styles.inputItem}>
+            <PrimaryButton
+              buttonBg={colors.primary}
+              textColor={colors.secondary}
+              label={"Next"}
+            />
+          </View>
+
+          <View style={styles.inputItem}>
+            <Text style={styles.subTitle}>
+              <Text style={styles.forgotPasswordText}>
+                Forgot your Login Details?
+              </Text>{" "}
+              <Text style={styles.link}>Get Help In Signin?</Text>
+            </Text>
+            <Text style={styles.subTitleOR}>OR</Text>
+          </View>
+          <View style={styles.inputItem}>
+            <PrimaryButton
+              buttonBg={colors.secondary}
+              textColor={colors.primary}
+              label={"Login With Facebook"}
+            />
+          </View>
+        </View>
+
+        <View style={styles.sectionBottom}>
+          <View style={styles.bottomContainer}>
+            <Text style={styles.subTitle}>
+              <Text style={styles.noAccount}>Dont Have an account?</Text>{" "}
+              <Text style={styles.link}>SignUp.</Text>
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
+
+export default LoginScreen;
+
+export const styles = StyleSheet.create({
+  container: {
+    display: "flex",
     flex: 1,
   },
-  gradient: {
+  sectionTop: {
+    display: "flex",
+    flex: 1,
+  },
+  sectionMiddle: {
+    display: "flex",
     flex: 1,
     justifyContent: "center",
+  },
+  sectionBottom: {
+    display: "flex",
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  languageContainer: {
+    display: "flex",
+    flex: 1,
     alignItems: "center",
   },
-  authContainer: {
-    width: "80%",
-    maxWidth: 400,
-    maxHeight: 400,
-    padding: 20,
+  instaLogo: {
+    width: "100%",
+    height: "50%",
+    alignSelf: "center",
   },
-  buttonContainer: {
-    marginTop: 10,
+  inputItem: {
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  subTitle: {
+    textAlign: "center",
+  },
+  forgotPasswordText: {
+    color: colors.gray,
+  },
+  link: {
+    color: colors.primary,
+  },
+  subTitleOR: {
+    textAlign: "center",
+    margin: 15,
+  },
+  bottomContainer: {
+    borderTopWidth: 1,
+    borderColor: colors.gray1,
+    padding: 15,
+  },
+  noAccount: {
+    color: colors.gray,
   },
 });
-
-// export default LoginScreen;
-
-export default connect(
-  (state: ApplicationState) => {
-    return { ...state.authState };
-  },
-  { ...authActionCreator }
-)(LoginScreen as any);

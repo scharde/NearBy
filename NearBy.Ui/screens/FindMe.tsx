@@ -8,7 +8,7 @@ import {
   Button,
 } from "react-native";
 import * as Location from "expo-location";
-import Input from "../components/UI/Input";
+import Input from "../components/PrimaryInputForm";
 import { connect } from "react-redux";
 import { ApplicationState } from "../store";
 import { actionCreators as authactionCreators } from "../store/auth";
@@ -30,7 +30,7 @@ const FindMeScreen = (props: FindMeScreenProps) => {
       <View>
         <Input
           id="address"
-          label="Address"
+          placeholder="Address"
           errorText="Please enter a valid address!"
           keyboardType="default"
           autoCapitalize="sentences"

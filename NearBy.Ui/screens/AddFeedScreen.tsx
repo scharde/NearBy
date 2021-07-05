@@ -8,12 +8,12 @@ import {
   Button,
   Text,
 } from "react-native";
-import CheckBox from "@react-native-community/checkbox";
+// import CheckBox from "@react-native-community/checkbox";
 import { connect } from "react-redux";
 import Loader from "../components/Loader";
 
-import Input from "../components/UI/Input";
-import Colors from "../constants/Colors";
+import Input from "../components/PrimaryInputForm";
+import { colors } from "../constants/Colors";
 import { ApplicationState } from "../store";
 import {
   actionCreators,
@@ -45,7 +45,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
         <View style={styles.formInputs}>
           <Input
             id="title"
-            label="Title"
+            placeholder="Title"
             errorText="Please enter a valid title!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -61,7 +61,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
           />
           <Input
             id="message"
-            label="Message"
+            placeholder="Message"
             errorText="Please enter a valid message!"
             keyboardType="default"
             returnKeyType="next"
@@ -75,7 +75,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
           />
           <Input
             id="city"
-            label="City"
+            placeholder="City"
             errorText="Please enter a valid city!"
             keyboardType="default"
             returnKeyType="next"
@@ -89,7 +89,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
           />
           <Input
             id="address"
-            label="Detail Address"
+            placeholder="Detail Address"
             errorText="Please enter a valid Address!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -106,7 +106,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
           />
 
           <View style={styles.checkboxContainer}>
-            <CheckBox
+            {/* <CheckBox
               value={isCurrentLocation}
               onValueChange={(newValue) => {
                 checkboxUpdateAction({
@@ -115,7 +115,7 @@ const AddFeedScreen = (props: AddFeedScreenProps) => {
                 } as ICheckboxUpdate);
               }}
               style={styles.checkbox}
-            />
+            /> */}
             <Text style={styles.checkboxLabel}>
               Is this your current location?
             </Text>
